@@ -48,8 +48,14 @@ def cluster(data, data_name):
     # 31st International Conference on Distributed Computing Systems Workshops, pp. 166-171.
     
     kl = KneeLocator(range(1, k_max + 1), sse, curve="convex", direction="decreasing")
+    elbow = kl.elbow
+    kmeans_txt = open("SSE/"+data_name + "_k-means.txt","w")
+    kmeans_txt.write(f"{'SSE':<12}{'K'}\n")
+    kmeans_txt.write(f"{round(sse[elbow-2],3):<12}{elbow-1}\n")
+    kmeans_txt.write(f"{round(sse[elbow-1],3):<12}{elbow} (optimal k)\n")
+    kmeans_txt.write(f"{round(sse[elbow],3):<12}{elbow+1}\n")
 
-    return kl.elbow
+    return elbow
 
 
 
