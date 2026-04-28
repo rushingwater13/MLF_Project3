@@ -72,6 +72,8 @@ def plotter2d(data, data_name, k_best):
             random_state=42
         )
     kmeans.fit(df) # maybe switch this to a subset of the data?
+    df["cluster"] = kmeans.labels_
+    df.to_csv("Labeled_Data/" + str(data_name))
 
     labels = kmeans.labels_
     
@@ -109,7 +111,8 @@ def plotter3d(data, data_name, k_best):
             random_state=42
         )
     kmeans.fit(df) # maybe switch this to a subset of the data?
-
+    df["cluster"] = kmeans.labels_
+    df.to_csv("Labeled_Data/" + str(data_name))
     labels = kmeans.labels_
 
     fig = plt.figure()
