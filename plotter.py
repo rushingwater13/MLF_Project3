@@ -13,7 +13,7 @@ def plotter2d(data, data_name):
     plt.figure()
     plt.scatter(X, Y)
     plt.title(f"{data_name}")
-    plt.savefig(f"Plots/{data_name}.png")
+    plt.savefig(f"Plots/{data_name}/{data_name}.png")
 
 
 
@@ -32,7 +32,7 @@ def plotter3d(data, data_name):
     ax.scatter(X, Y, Z, alpha=0.6)
 
     plt.title(f"{data_name}")
-    plt.savefig(f"Plots/{data_name}.png")
+    plt.savefig(f"Plots/{data_name}/{data_name}.png")
     plt.clf()
 
 

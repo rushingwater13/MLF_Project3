@@ -7,8 +7,6 @@ from kneed import KneeLocator
 
 def cluster(data, data_name):
 
-    # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
-
      # Load dataset, dropping NaNs to handle gaps
     df = pd.read_csv(f"Data/{data}", header = None).dropna()
     [n, p] = np.shape(df)
@@ -22,12 +20,14 @@ def cluster(data, data_name):
     # Record the SSE for several values of k
     sse = []
     for k in range(1, k_max + 1):
+
+        # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
         kmeans = KMeans(
             init="random", n_clusters=k, 
             n_init=q, max_iter=max_iter, 
             random_state=42
         )
-        kmeans.fit(df) # maybe switch this to a subset of the data?
+        kmeans.fit(df) 
 
         sse.append(kmeans.inertia_)
 
@@ -64,6 +64,7 @@ def plotter2d(data, data_name, k_best):
     # Load dataset, dropping NaNs to handle gaps
     df = pd.read_csv(f"Data/{data}", header = None).dropna()
 
+    df_dupe = df.iloc[:, :2]
     X = df.iloc[:,0]
     Y = df.iloc[:,1]
 
@@ -72,18 +73,19 @@ def plotter2d(data, data_name, k_best):
     max_iter = 500
 
     # Make a plot for each of k-1, k, and k+1
-    for i in range(k_best-1, k_best+1):
+    for i in range(k_best-1, k_best+2):
     
         # Get the labels for the data
+        # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
         kmeans = KMeans(
                 init="random", n_clusters=i, 
                 n_init=q, max_iter=max_iter, 
                 random_state=42
             )
-        kmeans.fit(df) 
+        kmeans.fit(df_dupe) 
         df["cluster"] = kmeans.labels_
         for k in range(i):
-            df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/cluster_" +str(k)+".csv") 
+            df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/k=" + str(i)+ "_cluster" +str(k)+".csv") 
 
 
         labels = kmeans.labels_
@@ -98,7 +100,8 @@ def plotter2d(data, data_name, k_best):
             plt.scatter(x, y)
 
         plt.title(data_name)
-        plt.savefig(f"Plots/{data_name}/{data_name}_{j}_Clusters.png")
+        plt.savefig(f"Plots/{data_name}/{data_name}_{i}_Clusters.png")
+        plt.close()
 
 
 
@@ -107,6 +110,7 @@ def plotter3d(data, data_name, k_best):
     # Load dataset, dropping NaNs to handle gaps
     df = pd.read_csv(f"Data/{data}", header = None).dropna()
 
+    df_dupe = df.iloc[:, :3]
     X = df.iloc[:,0]
     Y = df.iloc[:,1]
     Z = df.iloc[:,2]
@@ -117,18 +121,20 @@ def plotter3d(data, data_name, k_best):
 
 
     # Make a plot for each of k-1, k, and k+1
-    for i in range(k_best-1, k_best+1):
+    for i in range(k_best-1, k_best+2):
     
         # Get the labels for the data
+        # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
         kmeans = KMeans(
                 init="random", n_clusters=i, 
                 n_init=q, max_iter=max_iter, 
                 random_state=42
             )
-        kmeans.fit(df) # maybe switch this to a subset of the data?
+        kmeans.fit(df_dupe) 
         df["cluster"] = kmeans.labels_
+
         for k in range(i):
-            df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/cluster_" +str(k)+".csv") 
+            df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/k=" + str(i)+ "_cluster" +str(k)+".csv") 
         labels = kmeans.labels_
 
         fig = plt.figure()
@@ -141,7 +147,7 @@ def plotter3d(data, data_name, k_best):
             z = Z[labels == j]
             ax.scatter(x, y, z, alpha=0.6)
 
-        plt.title(data_name)
+        plt.title(f"{data_name}_{i}")
         plt.savefig(f"Plots/{data_name}/{data_name}_{i}_Clusters.png")
         plt.clf()
 
