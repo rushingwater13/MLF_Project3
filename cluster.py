@@ -71,31 +71,34 @@ def plotter2d(data, data_name, k_best):
     q = 10
     max_iter = 500
 
-    # Get the labels for the data
-    kmeans = KMeans(
-            init="random", n_clusters=k_best, 
-            n_init=q, max_iter=max_iter, 
-            random_state=42
-        )
-    kmeans.fit(df) # maybe switch this to a subset of the data?
-    df["cluster"] = kmeans.labels_
-    for k in range(k_best):
-        df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/cluster_" +str(k)+".csv") 
+    # Make a plot for each of k-1, k, and k+1
+    for i in range(k_best-1, k_best+1):
+    
+        # Get the labels for the data
+        kmeans = KMeans(
+                init="random", n_clusters=i, 
+                n_init=q, max_iter=max_iter, 
+                random_state=42
+            )
+        kmeans.fit(df) 
+        df["cluster"] = kmeans.labels_
+        for k in range(i):
+            df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/cluster_" +str(k)+".csv") 
 
 
-    labels = kmeans.labels_
+        labels = kmeans.labels_
     
 
-    plt.figure()
+        plt.figure()
 
-    # Divide and add the data according to the labels
-    for j in range(k_best):
-        x = X[labels == j]
-        y = Y[labels == j]
-        plt.scatter(x, y)
+        # Divide and add the data according to the labels
+        for j in range(i):
+            x = X[labels == j]
+            y = Y[labels == j]
+            plt.scatter(x, y)
 
-    plt.title(data_name)
-    plt.savefig(f"Plots/{data_name}_Clusters.png")
+        plt.title(data_name)
+        plt.savefig(f"Plots/{data_name}/{data_name}_{j}_Clusters.png")
 
 
 
@@ -112,31 +115,35 @@ def plotter3d(data, data_name, k_best):
     q = 10
     max_iter = 500
 
-    # Get the labels for the data
-    kmeans = KMeans(
-            init="random", n_clusters=k_best, 
-            n_init=q, max_iter=max_iter, 
-            random_state=42
-        )
-    kmeans.fit(df) # maybe switch this to a subset of the data?
-    df["cluster"] = kmeans.labels_
-    for k in range(k_best):
-        df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/cluster_" +str(k)+".csv") 
-    labels = kmeans.labels_
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    # Make a plot for each of k-1, k, and k+1
+    for i in range(k_best-1, k_best+1):
+    
+        # Get the labels for the data
+        kmeans = KMeans(
+                init="random", n_clusters=i, 
+                n_init=q, max_iter=max_iter, 
+                random_state=42
+            )
+        kmeans.fit(df) # maybe switch this to a subset of the data?
+        df["cluster"] = kmeans.labels_
+        for k in range(i):
+            df[df["cluster"] == k].to_csv("Labeled_Data/" +str(data_name)+"_clusters/cluster_" +str(k)+".csv") 
+        labels = kmeans.labels_
 
-    # Divide and add the data according to the labels
-    for j in range(k_best):
-        x = X[labels == j]
-        y = Y[labels == j]
-        z = Z[labels == j]
-        ax.scatter(x, y, z, alpha=0.6)
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
 
-    plt.title(data_name)
-    plt.savefig(f"Plots/{data_name}_Clusters.png")
-    plt.clf()
+        # Divide and add the data according to the labels
+        for j in range(i):
+            x = X[labels == j]
+            y = Y[labels == j]
+            z = Z[labels == j]
+            ax.scatter(x, y, z, alpha=0.6)
+
+        plt.title(data_name)
+        plt.savefig(f"Plots/{data_name}/{data_name}_{i}_Clusters.png")
+        plt.clf()
 
 
 
