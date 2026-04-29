@@ -38,7 +38,7 @@ def plotter2d(data, data_name, eps_val, min_samples_val):
         plt.scatter(x, y)
 
     plt.title(data_name + " - DBSCAN")
-    plt.savefig(f"Plots/{data_name}_dbscan_Clusters.png")
+    plt.savefig(f"Plots/{data_name}/{data_name}_dbscan_Clusters.png")
     plt.close()
 
 def plotter3d(data, data_name, eps_val, min_samples_val):
@@ -76,7 +76,7 @@ def plotter3d(data, data_name, eps_val, min_samples_val):
         ax.scatter(x, y, z, alpha=0.6)
 
     plt.title(data_name + " - DBSCAN")
-    plt.savefig(f"Plots/{data_name}_dbscan_Clusters.png")
+    plt.savefig(f"Plots/{data_name}/{data_name}_dbscan_Clusters.png")
     plt.clf()
 
 dataset_params = {
